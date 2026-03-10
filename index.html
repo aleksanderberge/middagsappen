@@ -66,7 +66,7 @@ main { max-width: 1060px; margin: 0 auto; padding: 2.5rem 1.5rem 4rem; }
 .btn-ghost:hover { border-color: var(--forest-pale); background: var(--forest-pale); }
 .btn-sm { padding: 0.38rem 0.85rem; font-size: 0.8rem; }
 
-/* ── WIZARD ── */
+/* WIZARD */
 .wizard-wrap { max-width: 700px; margin: 0 auto; }
 .steps-row { display: flex; align-items: center; margin-bottom: 0.4rem; }
 .step-dot {
@@ -118,9 +118,8 @@ main { max-width: 1060px; margin: 0 auto; padding: 2.5rem 1.5rem 4rem; }
 .cbtn:hover { background: var(--forest); color: #fff; border-color: var(--forest); }
 .cval { font-size: 1.1rem; font-weight: 700; min-width: 20px; text-align: center; color: var(--forest); }
 
-/* ── MEAL PLAN STEP ── */
+/* PLAN STEP */
 .plan-grid { display: flex; flex-direction: column; gap: 0.8rem; margin-bottom: 1.5rem; }
-
 .plan-row {
   background: var(--bg); border-radius: 16px; border: 2px solid var(--border);
   padding: 1rem 1.2rem;
@@ -128,29 +127,23 @@ main { max-width: 1060px; margin: 0 auto; padding: 2.5rem 1.5rem 4rem; }
   transition: border-color 0.2s;
 }
 .plan-row:hover { border-color: var(--forest-pale); }
-
 .plan-day-info { min-width: 80px; }
 .plan-day-name { font-weight: 700; font-size: 0.95rem; color: var(--forest); }
 .plan-day-pers { font-size: 0.75rem; color: var(--muted); margin-top: 1px; }
-
-.plan-meal-display {
-  flex: 1;
-  display: flex; align-items: center; gap: 0.8rem;
-}
+.plan-meal-display { flex: 1; display: flex; align-items: center; gap: 0.8rem; }
 .plan-meal-emoji { font-size: 1.8rem; line-height: 1; flex-shrink: 0; }
 .plan-meal-name { font-weight: 600; font-size: 0.95rem; color: var(--ink); }
 .plan-meal-tags { display: flex; gap: 0.3rem; margin-top: 3px; flex-wrap: wrap; }
 
-.tag {
-  padding: 0.15rem 0.55rem; border-radius: 20px;
-  font-size: 0.7rem; font-weight: 600;
-}
-.tag-fisk   { background: #D4EAF5; color: #1D5E7A; }
-.tag-kylling{ background: var(--forest-pale); color: var(--forest); }
-.tag-kjøtt  { background: var(--terra-pale); color: var(--terra); }
-.tag-pasta  { background: #EEE4F5; color: #5C3A80; }
-.tag-lett   { background: #F0F5D4; color: #4A6020; }
-.tag-tung   { background: #F5EDD0; color: #7A5010; }
+.tag { padding: 0.15rem 0.55rem; border-radius: 20px; font-size: 0.7rem; font-weight: 600; }
+.tag-fisk    { background: #D4EAF5; color: #1D5E7A; }
+.tag-kylling { background: var(--forest-pale); color: var(--forest); }
+.tag-kjøtt   { background: var(--terra-pale); color: var(--terra); }
+.tag-pasta   { background: #EEE4F5; color: #5C3A80; }
+.tag-annet   { background: #F0F0F0; color: #555; }
+.tag-lett    { background: #F0F5D4; color: #4A6020; }
+.tag-tung    { background: #F5EDD0; color: #7A5010; }
+.tag-brukt   { background: #FFE8E8; color: #A03030; }
 
 .swap-btn {
   background: #fff; border: 2px solid var(--border);
@@ -169,9 +162,17 @@ main { max-width: 1060px; margin: 0 auto; padding: 2.5rem 1.5rem 4rem; }
   font-size: 0.85rem; color: var(--forest); font-weight: 500;
 }
 
+/* history badge */
+.history-note {
+  display: inline-flex; align-items: center; gap: 0.4rem;
+  background: #FFF3E0; color: #8A5000; border-radius: 8px;
+  padding: 0.5rem 0.9rem; font-size: 0.8rem; font-weight: 500;
+  margin-bottom: 1rem;
+}
+
 .wizard-nav { display: flex; justify-content: space-between; margin-top: 1.8rem; gap: 0.6rem; }
 
-/* ── SWAP MODAL ── */
+/* SWAP MODAL */
 .overlay {
   position: fixed; inset: 0; background: rgba(0,0,0,0.45);
   display: flex; align-items: center; justify-content: center;
@@ -184,7 +185,6 @@ main { max-width: 1060px; margin: 0 auto; padding: 2.5rem 1.5rem 4rem; }
 }
 .modal h2 { font-family: 'Lora', serif; font-size: 1.3rem; color: var(--forest); margin-bottom: 0.4rem; }
 .modal-sub { color: var(--muted); font-size: 0.85rem; margin-bottom: 1.2rem; }
-
 .swap-grid { display: flex; flex-direction: column; gap: 0.5rem; }
 .swap-option {
   display: flex; align-items: center; gap: 0.9rem;
@@ -194,18 +194,16 @@ main { max-width: 1060px; margin: 0 auto; padding: 2.5rem 1.5rem 4rem; }
 }
 .swap-option:hover { border-color: var(--forest); background: var(--forest-pale); }
 .swap-option.current { border-color: var(--terra); background: var(--terra-pale); opacity: 0.7; cursor: default; }
-.swap-option.warned { opacity: 0.55; }
+.swap-option.warned { opacity: 0.6; }
 .swap-opt-emoji { font-size: 1.6rem; }
 .swap-opt-name { font-weight: 600; font-size: 0.9rem; flex: 1; }
 .swap-opt-warning { font-size: 0.72rem; color: var(--terra); margin-top: 1px; }
 .swap-opt-badge { font-size: 0.7rem; color: var(--muted); font-style: italic; }
-
 .modal-actions { display: flex; gap: 0.6rem; justify-content: flex-end; margin-top: 1.2rem; }
 
-/* ── SHOPPING LIST ── */
+/* SHOPPING LIST */
 .lists-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; align-items: start; }
 @media(max-width:700px){ .lists-wrap { grid-template-columns: 1fr; } }
-
 .list-card { background: #fff; border-radius: 20px; padding: 1.6rem 1.8rem; box-shadow: var(--shadow); }
 .list-card-header { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 1.3rem; }
 .list-icon { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; flex-shrink: 0; }
@@ -213,7 +211,6 @@ main { max-width: 1060px; margin: 0 auto; padding: 2.5rem 1.5rem 4rem; }
 .list-icon.fg  { background: var(--terra-pale); }
 .list-card-title { font-family: 'Lora', serif; font-size: 1.15rem; font-weight: 700; color: var(--forest); }
 .list-card-sub { font-size: 0.78rem; color: var(--muted); margin-top: 1px; }
-
 .shop-item { display: flex; align-items: center; gap: 0.7rem; padding: 0.6rem 0; border-bottom: 1px solid var(--border); }
 .shop-item:last-child { border-bottom: none; }
 .shop-check {
@@ -243,7 +240,6 @@ main { max-width: 1060px; margin: 0 auto; padding: 2.5rem 1.5rem 4rem; }
   max-height: 240px; overflow-y: auto; white-space: pre-wrap;
   border: 2px solid var(--border); margin-bottom: 1rem;
 }
-
 .empty { text-align: center; padding: 4rem 2rem; color: var(--muted); }
 .empty .ei { font-size: 3.5rem; margin-bottom: 1rem; }
 .empty h3 { font-family: 'Lora', serif; font-size: 1.3rem; color: var(--mid); margin-bottom: 0.5rem; }
@@ -257,6 +253,15 @@ main { max-width: 1060px; margin: 0 auto; padding: 2.5rem 1.5rem 4rem; }
   animation: slideUp 0.3s ease;
 }
 @keyframes slideUp { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
+
+/* Sync status */
+.sync-status {
+  display: flex; align-items: center; gap: 0.4rem;
+  font-size: 0.75rem; color: rgba(255,255,255,0.55);
+}
+.sync-dot { width: 7px; height: 7px; border-radius: 50%; background: #aaa; flex-shrink: 0; }
+.sync-dot.ok { background: #6fcf8a; }
+.sync-dot.err { background: #e07a4a; }
 </style>
 </head>
 <body>
@@ -267,13 +272,15 @@ main { max-width: 1060px; margin: 0 auto; padding: 2.5rem 1.5rem 4rem; }
     <button class="nav-btn active" id="nb-plan" onclick="showView('plan')">📅 Planlegg uke</button>
     <button class="nav-btn" id="nb-liste" onclick="showView('liste')">🛒 Handleliste</button>
   </nav>
+  <div class="sync-status" id="sync-status">
+    <div class="sync-dot" id="sync-dot"></div>
+    <span id="sync-label">Kobler til…</span>
+  </div>
 </header>
 
 <main>
   <div class="view active" id="view-plan">
-    <div class="page-head">
-      <h1 class="page-title">Planlegg uken</h1>
-    </div>
+    <div class="page-head"><h1 class="page-title">Planlegg uken</h1></div>
     <div class="wizard-wrap">
       <div id="step-ui"></div>
       <div id="step-content"></div>
@@ -294,6 +301,103 @@ main { max-width: 1060px; margin: 0 auto; padding: 2.5rem 1.5rem 4rem; }
 
 <div id="modals"></div>
 <div id="toasts"></div>
+
+<!-- Firebase -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-app.js";
+import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBbwwlIxEwbmoiShjFfYbIw0jS1SOiRgGE",
+  authDomain: "middagsplanlegger-d7812.firebaseapp.com",
+  projectId: "middagsplanlegger-d7812",
+  storageBucket: "middagsplanlegger-d7812.firebasestorage.app",
+  messagingSenderId: "136074409059",
+  appId: "1:136074409059:web:31ced3e108f8181c64f456",
+  measurementId: "G-FPX9PL84KL"
+};
+
+const app = initializeApp(firebaseConfig);
+const db  = getFirestore(app);
+
+// ── Week key helper: "2026-W11" ──
+function getWeekKey(date = new Date()) {
+  const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+  d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay() || 7));
+  const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
+  const week = Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
+  return `${d.getUTCFullYear()}-W${String(week).padStart(2,'0')}`;
+}
+
+// ── Load last week's history (not current week) ──
+async function loadHistory() {
+  try {
+    const ref = doc(db, 'familie', 'historikk');
+    const snap = await getDoc(ref);
+    if (snap.exists()) {
+      const data = snap.data().uker || {};
+      const currentWeek = getWeekKey();
+
+      // Collect recipe ids from all weeks EXCEPT current week, keep last 2
+      const pastWeeks = Object.entries(data)
+        .filter(([k]) => k !== currentWeek)
+        .sort(([a],[b]) => a.localeCompare(b))
+        .slice(-2)
+        .map(([,ids]) => ids);
+
+      window._history = pastWeeks;
+      window._weekData = data; // keep full map for saving
+    } else {
+      window._history = [];
+      window._weekData = {};
+    }
+    setSyncStatus(true, 'Synkronisert');
+  } catch(e) {
+    window._history = [];
+    window._weekData = {};
+    setSyncStatus(false, 'Frakoblet');
+    console.warn('Firebase feil:', e);
+  }
+  window._appReady();
+}
+
+// ── Save current week by week key – overwrites same week safely ──
+window.saveHistory = async function(weekRecipeIds) {
+  try {
+    const weekKey = getWeekKey();
+    const existing = window._weekData || {};
+
+    // Upsert this week's entry
+    existing[weekKey] = weekRecipeIds;
+
+    // Prune: keep only last 3 weeks total to avoid growing forever
+    const sorted = Object.entries(existing).sort(([a],[b]) => a.localeCompare(b));
+    const pruned = Object.fromEntries(sorted.slice(-3));
+
+    window._weekData = pruned;
+
+    // Also update in-memory history (exclude current week for suggestions)
+    window._history = sorted
+      .filter(([k]) => k !== weekKey)
+      .slice(-2)
+      .map(([,ids]) => ids);
+
+    const ref = doc(db, 'familie', 'historikk');
+    await setDoc(ref, { uker: pruned, oppdatert: new Date().toISOString() });
+    setSyncStatus(true, 'Lagret ✓');
+  } catch(e) {
+    setSyncStatus(false, 'Lagring feilet');
+    console.warn('Firebase lagring feilet:', e);
+  }
+};
+
+function setSyncStatus(ok, label) {
+  document.getElementById('sync-dot').className = 'sync-dot ' + (ok ? 'ok' : 'err');
+  document.getElementById('sync-label').textContent = label;
+}
+
+loadHistory();
+</script>
 
 <script>
 // ════════════════════════════════════
@@ -349,43 +453,42 @@ let S = {
   step: 1,
   selDays: new Set(),
   persons: {},
-  meals: {},       // dayKey -> recipeId
+  meals: {},
   chkOda: new Set(),
-  chkFg: new Set(),
+  chkFg:  new Set(),
+};
+
+// Called by Firebase module once history is loaded
+window._appReady = function() {
+  renderWizard();
 };
 
 // ════════════════════════════════════
-// SMART SUGGESTION ENGINE
+// SUGGESTION ENGINE
 // ════════════════════════════════════
+function getRecentIds() {
+  const h = window._history || [];
+  return new Set(h.flat());
+}
 
-/*  Rules (in priority order):
-    1. No recipe used twice
-    2. Min 1 fish recipe across the week
-    3. No fish two days in a row
-    4. No same protein two days in a row
-    5. After a "tung" meal → prefer "lett" next day
-*/
 function generatePlan(dayKeys) {
-  const n = dayKeys.length;
+  const recentIds = getRecentIds();
   let best = null;
-  // Try up to 200 random shuffles and score each
-  for (let attempt = 0; attempt < 200; attempt++) {
+
+  for (let attempt = 0; attempt < 300; attempt++) {
     const shuffled = shuffle([...RECIPES]);
     const plan = {};
     const used = new Set();
     let ok = true;
 
-    for (let i = 0; i < n; i++) {
+    for (let i = 0; i < dayKeys.length; i++) {
       const dk = dayKeys[i];
-      // pick first unused recipe that satisfies hard constraints
       const prev = i > 0 ? RECIPES.find(r => r.id === plan[dayKeys[i-1]]) : null;
       let picked = null;
 
       for (const r of shuffled) {
         if (used.has(r.id)) continue;
-        // Hard: no fish two days in a row
-        if (prev && prev.protein === 'fisk' && r.protein === 'fisk') continue;
-        // Hard: no same protein two days in a row
+        if (prev && prev.protein === 'fisk'    && r.protein === 'fisk') continue;
         if (prev && prev.protein === r.protein && r.protein !== 'annet') continue;
         picked = r;
         break;
@@ -397,20 +500,21 @@ function generatePlan(dayKeys) {
     }
 
     if (!ok) continue;
-
-    // Score this plan
-    const score = scorePlan(plan, dayKeys);
+    const score = scorePlan(plan, dayKeys, recentIds);
     if (!best || score > best.score) best = { plan, score };
   }
 
   return best ? best.plan : fallbackPlan(dayKeys);
 }
 
-function scorePlan(plan, dayKeys) {
+function scorePlan(plan, dayKeys, recentIds) {
   let score = 0;
   const recipes = dayKeys.map(dk => RECIPES.find(r => r.id === plan[dk]));
 
-  // Bonus: has at least one fish
+  // Big bonus: avoid recently used recipes
+  recipes.forEach(r => { if (!recentIds.has(r.id)) score += 8; });
+
+  // Bonus: at least one fish
   if (recipes.some(r => r.protein === 'fisk')) score += 10;
 
   // Bonus: light after heavy
@@ -418,11 +522,11 @@ function scorePlan(plan, dayKeys) {
     if (recipes[i-1].weight === 'tung' && recipes[i].weight === 'lett') score += 3;
   }
 
-  // Bonus: good protein variety (unique proteins)
+  // Bonus: protein variety
   const proteins = new Set(recipes.map(r => r.protein));
   score += proteins.size * 2;
 
-  // Penalty: two "tung" in a row
+  // Penalty: two tung in a row
   for (let i = 1; i < recipes.length; i++) {
     if (recipes[i-1].weight === 'tung' && recipes[i].weight === 'tung') score -= 4;
   }
@@ -431,7 +535,6 @@ function scorePlan(plan, dayKeys) {
 }
 
 function fallbackPlan(dayKeys) {
-  // Simple greedy fallback
   const plan = {};
   const used = new Set();
   dayKeys.forEach((dk, i) => {
@@ -443,119 +546,108 @@ function fallbackPlan(dayKeys) {
 }
 
 function shuffle(arr) {
-  for (let i = arr.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [arr[i], arr[j]] = [arr[j], arr[i]];
+  for (let i = arr.length-1; i > 0; i--) {
+    const j = Math.floor(Math.random()*(i+1));
+    [arr[i],arr[j]] = [arr[j],arr[i]];
   }
   return arr;
 }
 
-// Check what rules a recipe would violate if placed on dayIndex
 function getRuleWarnings(recipeId, dayKeys, dayIndex, currentPlan) {
   const r = RECIPES.find(x => x.id === recipeId);
   const warnings = [];
+  const recentIds = getRecentIds();
 
-  // Already used?
-  const usedElsewhere = dayKeys.some((dk, i) => i !== dayIndex && currentPlan[dk] === recipeId);
+  if (recentIds.has(recipeId)) warnings.push('Brukt forrige uke');
+
+  const usedElsewhere = dayKeys.some((dk,i) => i!==dayIndex && currentPlan[dk]===recipeId);
   if (usedElsewhere) warnings.push('Brukes allerede en annen dag');
 
-  const prevKey = dayIndex > 0 ? dayKeys[dayIndex - 1] : null;
-  const nextKey = dayIndex < dayKeys.length - 1 ? dayKeys[dayIndex + 1] : null;
-  const prevR = prevKey && currentPlan[prevKey] ? RECIPES.find(x => x.id === currentPlan[prevKey]) : null;
-  const nextR = nextKey && currentPlan[nextKey] ? RECIPES.find(x => x.id === currentPlan[nextKey]) : null;
+  const prevKey = dayIndex > 0 ? dayKeys[dayIndex-1] : null;
+  const nextKey = dayIndex < dayKeys.length-1 ? dayKeys[dayIndex+1] : null;
+  const prevR = prevKey && currentPlan[prevKey] ? RECIPES.find(x=>x.id===currentPlan[prevKey]) : null;
+  const nextR = nextKey && currentPlan[nextKey] ? RECIPES.find(x=>x.id===currentPlan[nextKey]) : null;
 
   if (prevR) {
-    if (prevR.protein === 'fisk' && r.protein === 'fisk') warnings.push('Fisk to dager på rad');
-    else if (prevR.protein === r.protein && r.protein !== 'annet') warnings.push(`${capitalize(r.protein)} dagen før også`);
-    if (prevR.weight === 'tung' && r.weight === 'tung') warnings.push('Tung rett etter tung rett');
+    if (prevR.protein==='fisk' && r.protein==='fisk') warnings.push('Fisk to dager på rad');
+    else if (prevR.protein===r.protein && r.protein!=='annet') warnings.push(`${cap(r.protein)} dagen før også`);
+    if (prevR.weight==='tung' && r.weight==='tung') warnings.push('Tung rett etter tung');
   }
   if (nextR) {
-    if (nextR.protein === 'fisk' && r.protein === 'fisk') warnings.push('Fisk dagen etter også');
-    else if (nextR.protein === r.protein && r.protein !== 'annet') warnings.push(`${capitalize(r.protein)} dagen etter også`);
+    if (nextR.protein==='fisk' && r.protein==='fisk') warnings.push('Fisk dagen etter også');
+    else if (nextR.protein===r.protein && r.protein!=='annet') warnings.push(`${cap(r.protein)} dagen etter også`);
   }
-
   return warnings;
 }
 
-function capitalize(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
+function cap(s) { return s.charAt(0).toUpperCase()+s.slice(1); }
 
 // ════════════════════════════════════
 // NAVIGATION
 // ════════════════════════════════════
 function showView(v) {
-  document.querySelectorAll('.view').forEach(e => e.classList.remove('active'));
-  document.querySelectorAll('.nav-btn').forEach(e => e.classList.remove('active'));
+  document.querySelectorAll('.view').forEach(e=>e.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(e=>e.classList.remove('active'));
   document.getElementById('view-'+v).classList.add('active');
   document.getElementById('nb-'+v).classList.add('active');
-  if (v === 'liste') renderListe();
+  if (v==='liste') renderListe();
 }
 
 // ════════════════════════════════════
 // WIZARD
 // ════════════════════════════════════
-const STEP_LABELS = ['Velg dager', 'Antall personer', 'Forslag til uken'];
+const STEP_LABELS = ['Velg dager','Antall personer','Forslag til uken'];
 
 function renderWizard() {
-  // Step indicator
-  let dots = '', lbls = '';
-  STEP_LABELS.forEach((l, i) => {
-    const n = i+1;
-    const cls = n < S.step ? 'done' : n === S.step ? 'active' : '';
-    dots += `<div class="step-dot ${cls}">${n < S.step ? '✓' : n}</div>`;
-    if (i < 2) dots += `<div class="step-line ${n < S.step ? 'done' : ''}"></div>`;
+  let dots='', lbls='';
+  STEP_LABELS.forEach((l,i) => {
+    const n=i+1, cls=n<S.step?'done':n===S.step?'active':'';
+    dots += `<div class="step-dot ${cls}">${n<S.step?'✓':n}</div>`;
+    if (i<2) dots += `<div class="step-line ${n<S.step?'done':''}"></div>`;
     lbls += `<div class="step-lbl">${l}</div>`;
   });
   document.getElementById('step-ui').innerHTML =
     `<div class="steps-row">${dots}</div><div class="step-labels-row">${lbls}</div>`;
 
-  if (S.step === 1) renderS1();
-  if (S.step === 2) renderS2();
-  if (S.step === 3) renderS3();
+  if (S.step===1) renderS1();
+  if (S.step===2) renderS2();
+  if (S.step===3) renderS3();
 }
 
-// ── Step 1 ──
 function renderS1() {
-  const today = new Date();
-  const mon = new Date(today);
-  mon.setDate(today.getDate() - ((today.getDay()+6)%7));
-
-  const html = DAYS.map((d, i) => {
-    const dt = new Date(mon); dt.setDate(mon.getDate()+i);
-    const chk = S.selDays.has(d.key) ? 'checked' : '';
+  const today=new Date(), mon=new Date(today);
+  mon.setDate(today.getDate()-((today.getDay()+6)%7));
+  const html = DAYS.map((d,i) => {
+    const dt=new Date(mon); dt.setDate(mon.getDate()+i);
+    const chk=S.selDays.has(d.key)?'checked':'';
     return `<label class="day-toggle">
       <input type="checkbox" ${chk} onchange="toggleDay('${d.key}',this.checked)">
-      <div class="day-box">
-        <span class="dn">${d.short}</span>
-        <span class="dd">${dt.getDate()}</span>
-      </div>
+      <div class="day-box"><span class="dn">${d.short}</span><span class="dd">${dt.getDate()}</span></div>
     </label>`;
   }).join('');
-
-  document.getElementById('step-content').innerHTML = `
+  document.getElementById('step-content').innerHTML=`
     <div class="step-card">
       <h2>Hvilke dager trenger du middag?</h2>
       <p>Velg dagene du vil planlegge for.</p>
       <div class="days-grid">${html}</div>
-      <div class="wizard-nav">
-        <div></div>
+      <div class="wizard-nav"><div></div>
         <button class="btn btn-terra" onclick="goStep(2)" ${S.selDays.size===0?'disabled':''}>Neste →</button>
       </div>
     </div>`;
 }
 
-function toggleDay(key, on) {
-  if (on) { S.selDays.add(key); if (!S.persons[key]) S.persons[key] = 4; }
-  else    { S.selDays.delete(key); }
+function toggleDay(key,on) {
+  if(on){S.selDays.add(key);if(!S.persons[key])S.persons[key]=4;}
+  else S.selDays.delete(key);
   renderWizard();
 }
 
-// ── Step 2 ──
 function renderS2() {
-  const rows = DAYS.filter(d => S.selDays.has(d.key)).map(d => {
-    const p = S.persons[d.key] || 4;
-    const sub = p===4 ? 'Hele familien' : p===2 ? 'To voksne' : p+' personer';
+  const rows=DAYS.filter(d=>S.selDays.has(d.key)).map(d=>{
+    const p=S.persons[d.key]||4;
+    const sub=p===4?'Hele familien':p===2?'To voksne':p+' personer';
     return `<div class="person-row">
-      <div class="dlabel">${d.full} <span>${sub}</span></div>
+      <div class="dlabel">${d.full}<span>${sub}</span></div>
       <div class="counter">
         <button class="cbtn" onclick="chgP('${d.key}',-1)">−</button>
         <span class="cval" id="pv-${d.key}">${p}</span>
@@ -563,11 +655,10 @@ function renderS2() {
       </div>
     </div>`;
   }).join('');
-
-  document.getElementById('step-content').innerHTML = `
+  document.getElementById('step-content').innerHTML=`
     <div class="step-card">
       <h2>Hvor mange spiser?</h2>
-      <p>Standard er 4 (hele familien). Juster for dager dere er færre.</p>
+      <p>Standard er 4. Juster for dager dere er færre hjemme.</p>
       <div class="persons-list">${rows}</div>
       <div class="wizard-nav">
         <button class="btn btn-ghost" onclick="goStep(1)">← Tilbake</button>
@@ -576,48 +667,43 @@ function renderS2() {
     </div>`;
 }
 
-function chgP(key, d) {
-  S.persons[key] = Math.max(1, Math.min(8, (S.persons[key]||4)+d));
-  renderWizard();
-}
+function chgP(key,d) { S.persons[key]=Math.max(1,Math.min(8,(S.persons[key]||4)+d)); renderWizard(); }
 
-// ── Step 3 ──
 function renderS3() {
-  const dayKeys = DAYS.filter(d => S.selDays.has(d.key)).map(d => d.key);
-
-  // Generate plan if not already done (or if days changed)
-  const currentKeys = Object.keys(S.meals);
-  const sameKeys = dayKeys.length === currentKeys.length && dayKeys.every(k => currentKeys.includes(k));
-  if (!sameKeys || dayKeys.some(k => !S.meals[k])) {
-    const newPlan = generatePlan(dayKeys);
-    S.meals = newPlan;
-  }
-
+  const dayKeys=DAYS.filter(d=>S.selDays.has(d.key)).map(d=>d.key);
+  const currentKeys=Object.keys(S.meals);
+  const sameKeys=dayKeys.length===currentKeys.length&&dayKeys.every(k=>currentKeys.includes(k));
+  if(!sameKeys||dayKeys.some(k=>!S.meals[k])) S.meals=generatePlan(dayKeys);
   renderPlanRows(dayKeys);
 }
 
 function renderPlanRows(dayKeys) {
-  if (!dayKeys) dayKeys = DAYS.filter(d => S.selDays.has(d.key)).map(d => d.key);
+  if(!dayKeys) dayKeys=DAYS.filter(d=>S.selDays.has(d.key)).map(d=>d.key);
+  const recentIds=getRecentIds();
 
-  // Check overall plan quality
-  const fishCount = dayKeys.filter(dk => {
-    const r = RECIPES.find(x => x.id === S.meals[dk]);
-    return r && r.protein === 'fisk';
+  const fishCount=dayKeys.filter(dk=>{
+    const r=RECIPES.find(x=>x.id===S.meals[dk]);
+    return r&&r.protein==='fisk';
   }).length;
 
-  const qualityNote = fishCount === 0
-    ? '⚠️ Ingen fiske-rett denne uken – vurder å bytte én rett'
-    : `✓ ${fishCount} fiske-rett${fishCount>1?'er':''} · God variasjon`;
+  const qualityNote=fishCount===0
+    ?'⚠️ Ingen fiske-rett denne uken'
+    :`✓ ${fishCount} fiske-rett${fishCount>1?'er':''} · God variasjon`;
 
-  const rows = dayKeys.map((dk, i) => {
-    const day = DAYS.find(d => d.key === dk);
-    const r = RECIPES.find(x => x.id === S.meals[dk]);
-    const p = S.persons[dk] || 4;
-    if (!r) return '';
+  // History note
+  const recentUsed=dayKeys.filter(dk=>recentIds.has(S.meals[dk])).length;
+  const histNote=recentIds.size===0
+    ?'ℹ️ Ingen historikk ennå – første gang du bruker appen'
+    :recentUsed===0
+      ?'✓ Ingen retter gjentas fra forrige uke'
+      :`⚠️ ${recentUsed} rett${recentUsed>1?'er':''} ble brukt forrige uke`;
 
-    const proteinTag = `<span class="tag tag-${r.protein}">${capitalize(r.protein)}</span>`;
-    const weightTag  = `<span class="tag tag-${r.weight}">${capitalize(r.weight)}</span>`;
-
+  const rows=dayKeys.map((dk)=>{
+    const day=DAYS.find(d=>d.key===dk);
+    const r=RECIPES.find(x=>x.id===S.meals[dk]);
+    const p=S.persons[dk]||4;
+    if(!r)return'';
+    const wasRecent=recentIds.has(r.id);
     return `<div class="plan-row">
       <div class="plan-day-info">
         <div class="plan-day-name">${day.full}</div>
@@ -627,17 +713,22 @@ function renderPlanRows(dayKeys) {
         <span class="plan-meal-emoji">${r.emoji}</span>
         <div>
           <div class="plan-meal-name">${r.name}</div>
-          <div class="plan-meal-tags">${proteinTag}${weightTag}</div>
+          <div class="plan-meal-tags">
+            <span class="tag tag-${r.protein}">${cap(r.protein)}</span>
+            <span class="tag tag-${r.weight}">${cap(r.weight)}</span>
+            ${wasRecent?'<span class="tag tag-brukt">Forrige uke</span>':''}
+          </div>
         </div>
       </div>
       <button class="swap-btn" onclick="openSwap('${dk}')">⇄ Bytt</button>
     </div>`;
   }).join('');
 
-  document.getElementById('step-content').innerHTML = `
+  document.getElementById('step-content').innerHTML=`
     <div class="step-card">
       <h2>Forslag til uken</h2>
-      <p>Appen har satt sammen en balansert ukeplan. Bytt enkeltdager om du vil noe annet.</p>
+      <p>Appen har laget en balansert plan basert på regler og historikk. Bytt enkeltdager om du vil noe annet.</p>
+      <div class="history-note">🕐 ${histNote}</div>
       <div class="regen-row">
         <span style="flex:1">${qualityNote}</span>
         <button class="btn btn-ghost btn-sm" onclick="regenPlan()">↻ Nytt forslag</button>
@@ -651,119 +742,116 @@ function renderPlanRows(dayKeys) {
 }
 
 function regenPlan() {
-  const dayKeys = DAYS.filter(d => S.selDays.has(d.key)).map(d => d.key);
-  S.meals = generatePlan(dayKeys);
+  const dayKeys=DAYS.filter(d=>S.selDays.has(d.key)).map(d=>d.key);
+  S.meals=generatePlan(dayKeys);
   renderPlanRows(dayKeys);
   toast('↻ Nytt forslag generert!');
 }
 
 function goStep(n) {
-  if (n === 3) {
-    // Force re-generation on going back to step 3
-    S.meals = {};
-  }
-  S.step = n;
+  if(n===3) S.meals={};
+  S.step=n;
   renderWizard();
 }
 
-function finish() {
-  S.chkOda = new Set();
-  S.chkFg  = new Set();
+async function finish() {
+  // Save this week's recipe ids to Firebase history
+  const usedIds=Object.values(S.meals);
+  if(window.saveHistory) await window.saveHistory(usedIds);
+
+  S.chkOda=new Set();
+  S.chkFg=new Set();
   showView('liste');
   toast('🛒 Handleliste er klar!');
 }
 
-// ── SWAP MODAL ──
+// SWAP MODAL
 function openSwap(dayKey) {
-  const dayKeys = DAYS.filter(d => S.selDays.has(d.key)).map(d => d.key);
-  const dayIndex = dayKeys.indexOf(dayKey);
-  const day = DAYS.find(d => d.key === dayKey);
-  const currentId = S.meals[dayKey];
+  const dayKeys=DAYS.filter(d=>S.selDays.has(d.key)).map(d=>d.key);
+  const dayIndex=dayKeys.indexOf(dayKey);
+  const day=DAYS.find(d=>d.key===dayKey);
+  const currentId=S.meals[dayKey];
+  const recentIds=getRecentIds();
 
-  const options = RECIPES.map(r => {
-    const isCurrent = r.id === currentId;
-    const warnings = isCurrent ? [] : getRuleWarnings(r.id, dayKeys, dayIndex, S.meals);
-    const hasWarning = warnings.length > 0;
-
-    return `<div class="swap-option ${isCurrent?'current':''} ${hasWarning&&!isCurrent?'warned':''}"
+  const options=RECIPES.map(r=>{
+    const isCurrent=r.id===currentId;
+    const warnings=isCurrent?[]:getRuleWarnings(r.id,dayKeys,dayIndex,S.meals);
+    const hasWarn=warnings.length>0;
+    const recentBadge=recentIds.has(r.id)&&!isCurrent?'<span class="tag tag-brukt" style="font-size:0.68rem">Forrige uke</span>':'';
+    return `<div class="swap-option ${isCurrent?'current':''} ${hasWarn&&!isCurrent?'warned':''}"
       onclick="${isCurrent?'':` swapMeal('${dayKey}',${r.id})`}">
       <span class="swap-opt-emoji">${r.emoji}</span>
       <div style="flex:1">
         <div class="swap-opt-name">${r.name}</div>
-        ${isCurrent ? '<div class="swap-opt-badge">Valgt nå</div>' : ''}
-        ${hasWarning && !isCurrent ? `<div class="swap-opt-warning">⚠ ${warnings[0]}</div>` : ''}
+        ${isCurrent?'<div class="swap-opt-badge">Valgt nå</div>':''}
+        ${hasWarn&&!isCurrent?`<div class="swap-opt-warning">⚠ ${warnings[0]}</div>`:''}
       </div>
-      <span class="tag tag-${r.protein}" style="font-size:0.68rem">${capitalize(r.protein)}</span>
+      ${recentBadge}
+      <span class="tag tag-${r.protein}" style="font-size:0.68rem">${cap(r.protein)}</span>
     </div>`;
   }).join('');
 
-  document.getElementById('modals').innerHTML = `
+  document.getElementById('modals').innerHTML=`
     <div class="overlay" onclick="if(event.target===this)closeModal()">
       <div class="modal">
         <h2>Bytt middag – ${day.full}</h2>
         <div class="modal-sub">Retter med ⚠ bryter én eller flere regler, men kan velges om du vil.</div>
         <div class="swap-grid">${options}</div>
-        <div class="modal-actions">
-          <button class="btn btn-ghost" onclick="closeModal()">Avbryt</button>
-        </div>
+        <div class="modal-actions"><button class="btn btn-ghost" onclick="closeModal()">Avbryt</button></div>
       </div>
     </div>`;
 }
 
-function swapMeal(dayKey, recipeId) {
-  S.meals[dayKey] = recipeId;
+function swapMeal(dayKey,recipeId) {
+  S.meals[dayKey]=recipeId;
   closeModal();
-  const dayKeys = DAYS.filter(d => S.selDays.has(d.key)).map(d => d.key);
+  const dayKeys=DAYS.filter(d=>S.selDays.has(d.key)).map(d=>d.key);
   renderPlanRows(dayKeys);
   toast('✓ Middag byttet!');
 }
 
-function closeModal() { document.getElementById('modals').innerHTML = ''; }
+function closeModal() { document.getElementById('modals').innerHTML=''; }
 
 // ════════════════════════════════════
 // SHOPPING LIST
 // ════════════════════════════════════
 function buildLists() {
-  const odaSet = {}, fgSet = {};
-  DAYS.filter(d => S.selDays.has(d.key) && S.meals[d.key]).forEach(d => {
-    const r = RECIPES.find(x => x.id === S.meals[d.key]);
-    if (!r) return;
-    r.oda.forEach(item => { odaSet[item] = true; });
-    r.fg.forEach(item  => { fgSet[item]  = true; });
+  const odaSet={},fgSet={};
+  DAYS.filter(d=>S.selDays.has(d.key)&&S.meals[d.key]).forEach(d=>{
+    const r=RECIPES.find(x=>x.id===S.meals[d.key]);
+    if(!r)return;
+    r.oda.forEach(i=>{odaSet[i]=true;});
+    r.fg.forEach(i=>{fgSet[i]=true;});
   });
-  return { oda: Object.keys(odaSet), fg: Object.keys(fgSet) };
+  return{oda:Object.keys(odaSet),fg:Object.keys(fgSet)};
 }
 
 function renderListe() {
-  const c = document.getElementById('liste-content');
-  if (S.selDays.size === 0) {
-    c.innerHTML = `<div class="empty"><div class="ei">🥘</div><h3>Ingen plan ennå</h3><p>Gå tilbake og planlegg uken din først.</p><br><button class="btn btn-terra" onclick="showView('plan')">Planlegg uken</button></div>`;
+  const c=document.getElementById('liste-content');
+  if(S.selDays.size===0){
+    c.innerHTML=`<div class="empty"><div class="ei">🥘</div><h3>Ingen plan ennå</h3><p>Gå tilbake og planlegg uken din først.</p><br><button class="btn btn-terra" onclick="showView('plan')">Planlegg uken</button></div>`;
     return;
   }
-
-  const selDays = DAYS.filter(d => S.selDays.has(d.key) && S.meals[d.key]);
-  const chips = selDays.map(d => {
-    const r = RECIPES.find(x => x.id === S.meals[d.key]);
-    const p = S.persons[d.key] || 4;
+  const selDays=DAYS.filter(d=>S.selDays.has(d.key)&&S.meals[d.key]);
+  const chips=selDays.map(d=>{
+    const r=RECIPES.find(x=>x.id===S.meals[d.key]);
+    const p=S.persons[d.key]||4;
     return `<div class="plan-chip">${d.short} ${r?r.emoji:''} ${r?r.name:'—'}<small>👥 ${p} pers.</small></div>`;
   }).join('');
 
-  const {oda, fg} = buildLists();
-
-  const mkItems = (list, prefix) => list.map((item, i) => {
-    const key = prefix+i;
-    const set = prefix==='o' ? S.chkOda : S.chkFg;
-    const on = set.has(key);
+  const{oda,fg}=buildLists();
+  const mkItems=(list,prefix)=>list.map((item,i)=>{
+    const key=prefix+i,set=prefix==='o'?S.chkOda:S.chkFg,on=set.has(key);
     return `<div class="shop-item ${on?'done':''}">
       <div class="shop-check ${on?'on':''}" onclick="toggleChk('${prefix}','${key}')">${on?'✓':''}</div>
       <span class="shop-item-name">${item}</span>
     </div>`;
   }).join('');
 
-  window.__odaTxt = `Handleliste – Oda:\n${oda.map(i=>'• '+i).join('\n')}`;
-  window.__fgTxt  = `Frukt & grønt:\n${fg.map(i=>'• '+i).join('\n')}`;
+  window.__odaTxt=`Handleliste – Oda:\n${oda.map(i=>'• '+i).join('\n')}`;
+  window.__fgTxt =`Frukt & grønt:\n${fg.map(i=>'• '+i).join('\n')}`;
 
-  c.innerHTML = `
+  c.innerHTML=`
     <div class="plan-banner">
       <div><h3>Ukens plan</h3><p>${selDays.length} middager planlagt</p></div>
       <div class="plan-chips">${chips}</div>
@@ -774,43 +862,37 @@ function renderListe() {
           <div class="list-icon oda">🛒</div>
           <div><div class="list-card-title">Oda-bestilling</div><div class="list-card-sub">${oda.length} varer</div></div>
         </div>
-        ${oda.length ? mkItems(oda,'o') : '<p style="color:var(--muted);font-size:.88rem">Ingen varer</p>'}
-        <div class="list-actions">
-          <button class="btn btn-forest btn-sm" onclick="copyTxt('oda')">📋 Kopier til Oda</button>
-        </div>
+        ${oda.length?mkItems(oda,'o'):'<p style="color:var(--muted);font-size:.88rem">Ingen varer</p>'}
+        <div class="list-actions"><button class="btn btn-forest btn-sm" onclick="copyTxt('oda')">📋 Kopier til Oda</button></div>
       </div>
       <div class="list-card">
         <div class="list-card-header">
           <div class="list-icon fg">🥦</div>
           <div><div class="list-card-title">Frukt & grønt</div><div class="list-card-sub">${fg.length} varer</div></div>
         </div>
-        ${fg.length ? mkItems(fg,'f') : '<p style="color:var(--muted);font-size:.88rem">Ingen frukt & grønt denne uken 🎉</p>'}
-        ${fg.length ? `<div class="list-actions"><button class="btn btn-terra btn-sm" onclick="copyTxt('fg')">📋 Kopier liste</button></div>` : ''}
+        ${fg.length?mkItems(fg,'f'):'<p style="color:var(--muted);font-size:.88rem">Ingen frukt & grønt denne uken 🎉</p>'}
+        ${fg.length?`<div class="list-actions"><button class="btn btn-terra btn-sm" onclick="copyTxt('fg')">📋 Kopier liste</button></div>`:''}
       </div>
     </div>`;
 }
 
-function toggleChk(prefix, key) {
-  const set = prefix==='o' ? S.chkOda : S.chkFg;
-  set.has(key) ? set.delete(key) : set.add(key);
+function toggleChk(prefix,key){
+  const set=prefix==='o'?S.chkOda:S.chkFg;
+  set.has(key)?set.delete(key):set.add(key);
   renderListe();
 }
 
-function clearChecked() {
-  S.chkOda.clear(); S.chkFg.clear();
-  renderListe(); toast('Avkryssede varer fjernet');
-}
+function clearChecked(){S.chkOda.clear();S.chkFg.clear();renderListe();toast('Avkryssede varer fjernet');}
 
-function copyTxt(type) {
-  const txt = type==='oda' ? window.__odaTxt : window.__fgTxt;
-  if (!txt) return;
-  navigator.clipboard.writeText(txt).then(() => {
-    toast(type==='oda' ? '📋 Oda-liste kopiert!' : '📋 Frukt & grønt kopiert!');
-  }).catch(() => {
-    document.getElementById('modals').innerHTML = `
+function copyTxt(type){
+  const txt=type==='oda'?window.__odaTxt:window.__fgTxt;
+  if(!txt)return;
+  navigator.clipboard.writeText(txt).then(()=>{
+    toast(type==='oda'?'📋 Oda-liste kopiert!':'📋 Frukt & grønt kopiert!');
+  }).catch(()=>{
+    document.getElementById('modals').innerHTML=`
       <div class="overlay" onclick="if(event.target===this)closeModal()">
-        <div class="modal">
-          <h2>Kopier listen</h2>
+        <div class="modal"><h2>Kopier listen</h2>
           <div class="copy-area">${type==='oda'?window.__odaTxt:window.__fgTxt}</div>
           <div class="modal-actions"><button class="btn btn-ghost" onclick="closeModal()">Lukk</button></div>
         </div>
@@ -818,19 +900,11 @@ function copyTxt(type) {
   });
 }
 
-function toast(msg) {
-  const t = document.getElementById('toasts');
-  t.innerHTML = `<div class="toast">${msg}</div>`;
-  setTimeout(() => { t.innerHTML = ''; }, 2800);
+function toast(msg){
+  const t=document.getElementById('toasts');
+  t.innerHTML=`<div class="toast">${msg}</div>`;
+  setTimeout(()=>{t.innerHTML='';},2800);
 }
-
-function goStep(n) {
-  S.step = n;
-  renderWizard();
-}
-
-// ── INIT ──
-renderWizard();
 </script>
 </body>
 </html>
