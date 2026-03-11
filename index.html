@@ -248,6 +248,30 @@ main{max-width:700px;margin:0 auto;padding:2rem 1.2rem 5rem;}
 
 .copy-area{background:var(--bg);border-radius:10px;padding:0.9rem 1rem;font-family:monospace;font-size:0.82rem;line-height:1.8;max-height:220px;overflow-y:auto;white-space:pre-wrap;border:2px solid var(--border);margin-bottom:0.9rem;}
 
+/* ══ PRODUKTKART ══ */
+.link-btn{width:22px;height:22px;border-radius:50%;border:none;background:none;cursor:pointer;font-size:0.9rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.15s;padding:0;line-height:1;color:var(--muted);}
+.link-btn.linked{color:#4A9A5E;}
+.link-btn:hover{transform:scale(1.2);}
+.pk-search-wrap{display:flex;gap:0.5rem;margin-bottom:0.9rem;}
+.pk-search-wrap input{flex:1;padding:0.6rem 0.9rem;border:2px solid var(--border);border-radius:10px;font-family:'Outfit',sans-serif;font-size:0.92rem;outline:none;}
+.pk-search-wrap input:focus{border-color:var(--forest);}
+.pk-results{display:flex;flex-direction:column;gap:0.4rem;max-height:300px;overflow-y:auto;}
+.pk-result{display:flex;align-items:center;gap:0.75rem;padding:0.65rem 0.8rem;border-radius:12px;border:2px solid var(--border);background:var(--bg);cursor:pointer;transition:all 0.15s;}
+.pk-result:hover{border-color:var(--forest);background:var(--forest-pale);}
+.pk-result.selected{border-color:var(--forest);background:var(--forest-pale);}
+.pk-result-img{width:44px;height:44px;border-radius:8px;object-fit:contain;background:#fff;flex-shrink:0;}
+.pk-result-name{font-weight:600;font-size:0.85rem;color:var(--forest);line-height:1.3;}
+.pk-result-meta{font-size:0.72rem;color:var(--muted);margin-top:2px;}
+.pk-current{background:var(--forest-pale);border-radius:12px;padding:0.75rem 1rem;margin-bottom:0.9rem;display:flex;align-items:center;gap:0.75rem;}
+.pk-current-img{width:40px;height:40px;border-radius:8px;object-fit:contain;background:#fff;flex-shrink:0;}
+.pk-current-name{font-size:0.85rem;font-weight:600;color:var(--forest);}
+.pk-current-label{font-size:0.72rem;color:var(--mid);margin-bottom:2px;}
+.pk-empty,.pk-loading{text-align:center;padding:1.5rem;color:var(--muted);font-size:0.85rem;}
+.oda-status-bar{display:flex;align-items:center;justify-content:space-between;background:var(--gold-pale);border:2px solid #EDD88A;border-radius:12px;padding:0.7rem 1rem;margin-bottom:1rem;gap:0.5rem;flex-wrap:wrap;}
+.oda-status-text{font-size:0.8rem;color:var(--gold);font-weight:600;}
+.oda-status-sub{font-size:0.72rem;color:#8A6A10;margin-top:1px;}
+.ing-kobling{font-size:0.72rem;color:var(--muted);font-weight:400;margin-left:0.3rem;}
+
 /* ── MISC ── */
 .empty{text-align:center;padding:3.5rem 2rem;color:var(--muted);}
 .empty .ei{font-size:3rem;margin-bottom:0.8rem;}
@@ -312,7 +336,10 @@ main{max-width:700px;margin:0 auto;padding:2rem 1.2rem 5rem;}
   <!-- RECIPE EDITOR -->
   <div class="view" id="view-editor">
     <div class="editor-head">
-      <h1 class="editor-title">Middagsretter</h1>
+      <div style="display:flex;align-items:center;gap:0.8rem;">
+        <button class="btn btn-ghost btn-sm" onclick="showView('home')">← Hjem</button>
+        <h1 class="editor-title">Middagsretter</h1>
+      </div>
       <button class="btn btn-terra" onclick="openRecipeForm()">+ Ny rett</button>
     </div>
     <div id="recipe-list-content"><div class="loading">Laster retter…</div></div>
@@ -397,10 +424,23 @@ async function loadAll() {
 
     setSyncStatus(true,'Synkronisert');
   } catch(e) {
+    console.error('loadAll feil:', e);
     window._recipes=DEFAULT_RECIPES.map((r,i)=>({id:'r'+i,...r}));
     window._weekData={};window._history=[];window._thisWeek=null;
-    setSyncStatus(false,'Frakoblet');
+    setSyncStatus(false,'Frakoblet – viser standardretter');
+    console.error('Firestore-feil, detaljer:', e?.code, e?.message);
   }
+
+  // Last produktkart separat – feil her skal ikke blokkere resten
+  try {
+    window._produktkart = {};
+    const pkSnap = await getDocs(collection(db,'produktkart'));
+    pkSnap.forEach(d => { window._produktkart[d.id] = d.data(); });
+  } catch(e) {
+    console.warn('Produktkart ikke tilgjengelig:', e.message);
+    window._produktkart = {};
+  }
+
   window._appReady();
 }
 
@@ -433,6 +473,31 @@ window._fb = {
   async deleteRecipe(id) {
     await deleteDoc(doc(db,'retter',id));
     window._recipes=window._recipes.filter(r=>r.id!==id);
+  },
+  // Produktkart: koble ingrediensNavn → Oda-produkt
+  pkId(ingrediensNavn) {
+    return btoa(encodeURIComponent(ingrediensNavn)).replace(/[^a-zA-Z0-9]/g,'').slice(0,40);
+  },
+  async savePKobling(ingrediensNavn, odaProdukt) {
+    try {
+      const id = this.pkId(ingrediensNavn);
+      const data = { ingrediensNavn, ...odaProdukt, oppdatert: new Date().toISOString() };
+      await setDoc(doc(db,'produktkart',id), data);
+      window._produktkart[id] = data;
+      window._pkIdx = window._pkIdx || {};
+      window._pkIdx[ingrediensNavn] = data;
+      setSyncStatus(true,'Kobling lagret ✓');
+      return data;
+    } catch(e) { setSyncStatus(false,'Lagring feilet'); return null; }
+  },
+  async deletePKobling(ingrediensNavn) {
+    try {
+      const id = this.pkId(ingrediensNavn);
+      await deleteDoc(doc(db,'produktkart',id));
+      delete window._produktkart[id];
+      if(window._pkIdx) delete window._pkIdx[ingrediensNavn];
+      setSyncStatus(true,'Kobling fjernet ✓');
+    } catch(e) { setSyncStatus(false,'Feil ved sletting'); }
   }
 };
 
@@ -441,7 +506,12 @@ function setSyncStatus(ok,label){
   document.getElementById('sync-label').textContent=label;
 }
 
-loadAll();
+// Vent til app-scriptet er ferdig definert, start så lasting
+if (typeof window._appReady === 'function') {
+  loadAll();
+} else {
+  window._firebaseReady = loadAll;
+}
 </script>
 
 <!-- ══ APP ══ -->
@@ -499,15 +569,6 @@ const STAPLES = [
       {label:'Én boks',have:1},
       {label:'To bokser+',have:2},
     ]},
-  { id:'kaffe', emoji:'☕', name:'Kaffe',
-    question:'Kaffe igjen?',
-    weeklyQty:0.5, unit:'pose', unitSize:'500g',
-    odaItem:'Friele Frokostkaffe Filtermalt 500g',
-    options:[
-      {label:'Nesten tomt',have:0},
-      {label:'Halvfull pose',have:0.5},
-      {label:'Full pose+',have:1},
-    ]},
 ];
 
 // ════════════════════════════════════
@@ -531,10 +592,19 @@ const STEP_LABELS=['Dager','Personer','Middager','Handlevarer'];
 // INIT
 // ════════════════════════════════════
 window._appReady = function() {
-  renderHome();
-  renderWizard();
-  renderEditor();
+  // Bygg opp navn-indeks fra produktkart for rask oppslag
+  window._pkIdx = {};
+  Object.values(window._produktkart||{}).forEach(p => {
+    if(p.ingrediensNavn) window._pkIdx[p.ingrediensNavn] = p;
+  });
+  renderHome(); renderWizard(); renderEditor();
 };
+
+// Hvis Firebase var ferdig før dette scriptet – start nå
+if (typeof window._firebaseReady === 'function') {
+  window._firebaseReady();
+  window._firebaseReady = null;
+}
 
 // ════════════════════════════════════
 // NAVIGATION
@@ -847,7 +917,9 @@ function getRecentIds(){
 }
 
 function generatePlan(dayKeys){
-  const recipes=(window._recipes||[]).filter(r=>!r.hidden);
+  const allRecipes=(window._recipes||[]).filter(r=>!r.hidden);
+  const recipes=allRecipes.length>0?allRecipes:(window._recipes||[]);
+  if(!recipes.length) return fallbackPlan(dayKeys,[]);
   const recentIds=getRecentIds();
   let best=null;
 
@@ -859,12 +931,17 @@ function generatePlan(dayKeys){
       const dk=dayKeys[i];
       const prev=i>0?recipes.find(r=>r.id===plan[dayKeys[i-1]]):null;
       let picked=null;
+      // First pass: follow rules
       for(const r of shuffled){
         if(used.has(r.id))continue;
         if(prev&&prev.protein==='fisk'&&r.protein==='fisk')continue;
         if(prev&&prev.protein===r.protein&&r.protein!=='annet')continue;
         picked=r;break;
       }
+      // Second pass: ignore rules if nothing found
+      if(!picked){ for(const r of shuffled){ if(!used.has(r.id)){picked=r;break;} } }
+      // Third pass: allow reuse if fewer recipes than days
+      if(!picked) picked=shuffled[i%shuffled.length];
       if(!picked){ok=false;break;}
       plan[dk]=picked.id;used.add(picked.id);
     }
@@ -894,10 +971,11 @@ function scorePlan(plan,dayKeys,recentIds,recipes){
 }
 
 function fallbackPlan(dayKeys,recipes){
+  if(!recipes||!recipes.length) return {};
   const plan={};const used=new Set();
   dayKeys.forEach((dk,i)=>{
     const r=recipes.find(r=>!used.has(r.id))||recipes[i%recipes.length];
-    plan[dk]=r.id;used.add(r.id);
+    if(r){ plan[dk]=r.id; used.add(r.id); }
   });
   return plan;
 }
@@ -1097,6 +1175,9 @@ function buildLists(){
   return{oda:Object.keys(odaSet),fg:Object.keys(fgSet)};
 }
 
+function getPK(navn) { return (window._pkIdx||{})[navn] || null; }
+function esc(s){ return (s||'').replace(/\\/g,'\\\\').replace(/'/g,"\\'"); }
+
 function renderListe(){
   const c=document.getElementById('liste-content');
   if(S.selDays.size===0){
@@ -1114,19 +1195,60 @@ function renderListe(){
   const{oda,fg}=buildLists();
   const staples=S.stapleItems||[];
 
-  const mkItems=(list,prefix)=>list.map((item,i)=>{
-    const key=prefix+i;
-    const set=prefix==='o'?S.chkOda:prefix==='f'?S.chkFg:S.chkStaple;
+  // Tell koblingsstatus for Oda-varer
+  const antallKoblet = oda.filter(i => getPK(i)).length;
+  const antallUkoblet = oda.length - antallKoblet;
+
+  // Bygg vare-rad med koblings-knapp
+  const mkOdaItem=(item,key,set)=>{
+    const on=set.has(key);
+    const pk=getPK(item);
+    const linked=pk!==null;
+    return `<div class="shop-item ${on?'done':''}">
+      <div class="shop-check ${on?'on':''}" onclick="toggleChk('o','${key}')">${on?'✓':''}</div>
+      <span class="shop-item-name">${item}${linked?`<span class="ing-kobling">→ ${pk.odaNavn}</span>`:''}</span>
+      <button class="link-btn ${linked?'linked':''}"
+        title="${linked?`Koblet: ${pk.odaNavn} – klikk for å endre`:'Koble til Oda-produkt'}"
+        onclick="openPKModal('${esc(item)}')">
+        ${linked?'🔗':'○'}
+      </button>
+    </div>`;
+  };
+  const mkItem=(item,key,set)=>{
     const on=set.has(key);
     return `<div class="shop-item ${on?'done':''}">
-      <div class="shop-check ${on?'on':''}" onclick="toggleChk('${prefix}','${key}')">${on?'✓':''}</div>
+      <div class="shop-check ${on?'on':''}" onclick="toggleChk('s','${key}')">${on?'✓':''}</div>
       <span class="shop-item-name">${item}</span>
     </div>`;
-  }).join('');
+  };
+  const mkFgItem=(item,key,set)=>{
+    const on=set.has(key);
+    return `<div class="shop-item ${on?'done':''}">
+      <div class="shop-check ${on?'on':''}" onclick="toggleChk('f','${key}')">${on?'✓':''}</div>
+      <span class="shop-item-name">${item}</span>
+    </div>`;
+  };
 
-  // Build combined oda list (meal ingredients + staples)
-  const odaAll=[...oda,...staples];
-  window.__odaTxt=`Handleliste – Oda:\n${odaAll.map(i=>'• '+i).join('\n')}`;
+  const odaHtml = oda.map((item,i)=>mkOdaItem(item,'o'+i,S.chkOda)).join('');
+  const stapleHtml = staples.map((item,i)=>mkItem(item,'s'+i,S.chkStaple)).join('');
+  const fgHtml = fg.map((item,i)=>mkFgItem(item,'f'+i,S.chkFg)).join('');
+
+  const koblingsBanner = oda.length>0 ? `
+    <div class="oda-status-bar">
+      <div>
+        <div class="oda-status-text">${antallUkoblet===0
+          ? '✓ Alle varer er koblet til Oda-produkter'
+          : `${antallKoblet} av ${oda.length} varer koblet`}</div>
+        <div class="oda-status-sub">${antallUkoblet>0
+          ? `${antallUkoblet} vare${antallUkoblet>1?'r':''} mangler Oda-kobling — klikk ○ for å koble`
+          : 'Koblingene brukes når du setter opp Oda-skriptet'}</div>
+      </div>
+    </div>` : '';
+
+  // Bygg kopier-tekst med Oda-navn der koblet
+  window.__odaTxt=`Handleliste – Oda:\n${[...oda,...staples].map(i=>{
+    const pk=getPK(i); return '• '+(pk?pk.odaNavn:i);
+  }).join('\n')}`;
   window.__fgTxt=`Frukt & grønt:\n${fg.map(i=>'• '+i).join('\n')}`;
 
   c.innerHTML=`
@@ -1134,6 +1256,7 @@ function renderListe(){
       <div><h3>Ukens plan</h3><p>${selDays.length} middager planlagt</p></div>
       <div class="plan-chips">${chips}</div>
     </div>
+    ${koblingsBanner}
     <div class="lists-wrap">
       <div>
         <div class="list-card" style="margin-bottom:1.2rem">
@@ -1141,8 +1264,8 @@ function renderListe(){
             <div class="list-icon oda">🛒</div>
             <div><div class="list-card-title">Oda-bestilling</div><div class="list-card-sub">${oda.length} middagsvarer${staples.length?` + ${staples.length} faste`:''}  </div></div>
           </div>
-          ${oda.length?mkItems(oda,'o'):'<p style="color:var(--muted);font-size:.85rem">Ingen varer</p>'}
-          ${staples.length?`<div style="border-top:2px solid var(--gold-pale);margin:0.6rem 0 0.4rem;padding-top:0.6rem;font-size:0.72rem;font-weight:700;color:var(--gold);letter-spacing:0.5px;text-transform:uppercase;">Faste varer</div>${mkItems(staples,'s')}`:''}
+          ${oda.length?odaHtml:'<p style="color:var(--muted);font-size:.85rem">Ingen varer</p>'}
+          ${staples.length?`<div style="border-top:2px solid var(--gold-pale);margin:0.6rem 0 0.4rem;padding-top:0.6rem;font-size:0.72rem;font-weight:700;color:var(--gold);letter-spacing:0.5px;text-transform:uppercase;">Faste varer</div>${stapleHtml}`:''}
           <div class="list-actions"><button class="btn btn-forest btn-sm" onclick="copyTxt('oda')">📋 Kopier til Oda</button></div>
         </div>
       </div>
@@ -1151,10 +1274,144 @@ function renderListe(){
           <div class="list-icon fg">🥦</div>
           <div><div class="list-card-title">Frukt & grønt</div><div class="list-card-sub">${fg.length} varer</div></div>
         </div>
-        ${fg.length?mkItems(fg,'f'):'<p style="color:var(--muted);font-size:.85rem">Ingen frukt & grønt 🎉</p>'}
+        ${fg.length?fgHtml:'<p style="color:var(--muted);font-size:.85rem">Ingen frukt & grønt 🎉</p>'}
         ${fg.length?`<div class="list-actions"><button class="btn btn-terra btn-sm" onclick="copyTxt('fg')">📋 Kopier liste</button></div>`:''}
       </div>
     </div>`;
+}
+
+// ═══════════════════════════════════════════
+// PRODUKTKART – koble ingredienser til Oda
+// ═══════════════════════════════════════════
+
+function openPKModal(ingrediensNavn) {
+  window._pkAktiv = ingrediensNavn;
+  const pk = getPK(ingrediensNavn);
+  const currentHtml = pk ? `
+    <div class="pk-current">
+      ${pk.img ? `<img class="pk-current-img" src="${pk.img}" alt="">` : '<div class="pk-current-img" style="background:var(--forest-pale);display:flex;align-items:center;justify-content:center;font-size:1.4rem">🛒</div>'}
+      <div style="flex:1">
+        <div class="pk-current-label">Koblet til:</div>
+        <div class="pk-current-name">${pk.odaNavn}</div>
+        ${pk.price ? `<div style="font-size:0.72rem;color:var(--muted)">${pk.price}</div>` : ''}
+      </div>
+      <button class="btn btn-ghost btn-sm" style="color:var(--terra);flex-shrink:0" onclick="fjernPK('${esc(ingrediensNavn)}')">Fjern</button>
+    </div>` : '';
+
+  document.getElementById('modals').innerHTML = `
+    <div class="overlay" onclick="if(event.target===this)closeModal()">
+      <div class="modal">
+        <h2>Koble til Oda-produkt</h2>
+        <div class="modal-sub">Ingrediens: <strong>${ingrediensNavn}</strong></div>
+        ${currentHtml}
+        <div class="pk-search-wrap">
+          <input id="pk-q" type="text" placeholder="Søk på Oda…" value="${ingrediensNavn}"
+            onkeydown="if(event.key==='Enter')kjorPKSok()">
+          <button class="btn btn-forest btn-sm" onclick="kjorPKSok()">Søk</button>
+        </div>
+        <div id="pk-res" class="pk-results">
+          <div class="pk-loading">Søker…</div>
+        </div>
+        <div class="modal-actions" style="justify-content:space-between;align-items:center;flex-wrap:wrap;gap:0.5rem;">
+          <a href="https://oda.com/no/search/?q=${encodeURIComponent(ingrediensNavn)}" target="_blank"
+             style="font-size:0.78rem;color:var(--forest);text-decoration:underline;">
+            Søk på oda.com ↗
+          </a>
+          <div style="display:flex;gap:0.5rem;">
+            <button class="btn btn-ghost btn-sm" onclick="openPKManuell()">Legg inn manuelt</button>
+            <button class="btn btn-ghost" onclick="closeModal()">Lukk</button>
+          </div>
+        </div>
+      </div>
+    </div>`;
+
+  setTimeout(()=>{ document.getElementById('pk-q')?.focus(); kjorPKSok(); }, 80);
+}
+
+async function kjorPKSok() {
+  const q = document.getElementById('pk-q')?.value?.trim();
+  if(!q) return;
+  const el = document.getElementById('pk-res');
+  if(!el) return;
+  el.innerHTML = '<div class="pk-loading">Søker…</div>';
+
+  try {
+    // Oda sitt interne søke-API
+    const url = `https://oda.com/api/v1/search/?q=${encodeURIComponent(q)}&page_size=12`;
+    const resp = await fetch(url, { headers:{'Accept':'application/json'}, credentials:'omit' });
+    if(!resp.ok) throw new Error('cors');
+    const json = await resp.json();
+    const items = (json.items || json.results || []).map(p => ({
+      id: p.id,
+      name: p.full_name || p.name,
+      price: p.unit_price_fractional ? (p.unit_price_fractional/100).toFixed(2)+' kr' : '',
+      img: p.images?.[0]?.thumbnail?.url || p.images?.[0]?.url || '',
+      url: `https://oda.com/no/products/${p.id}/`,
+    }));
+    if(!items.length){ el.innerHTML='<div class="pk-empty">Ingen treff – prøv et annet søkeord</div>'; return; }
+    const aktiv = getPK(window._pkAktiv);
+    el.innerHTML = items.map(p=>`
+      <div class="pk-result ${aktiv?.odaId===p.id?'selected':''}" onclick="velgPK(${p.id},'${esc(p.name)}','${esc(p.img)}','${esc(p.price)}','${esc(p.url)}')">
+        ${p.img?`<img class="pk-result-img" src="${p.img}" alt="">`:'<div class="pk-result-img" style="background:var(--bg);display:flex;align-items:center;justify-content:center;font-size:1.4rem">🛒</div>'}
+        <div style="flex:1;min-width:0">
+          <div class="pk-result-name">${p.name}</div>
+          <div class="pk-result-meta">${p.price}</div>
+        </div>
+        ${aktiv?.odaId===p.id?'<span style="color:#4A9A5E">✓</span>':''}
+      </div>`).join('');
+  } catch(e) {
+    // CORS-blokkert – vis forklaring og manuell inntasting
+    el.innerHTML = `
+      <div style="padding:0.9rem;background:var(--gold-pale);border-radius:10px;font-size:0.82rem;color:#6A4A00;line-height:1.6;margin-bottom:0.5rem;">
+        <strong>Oda tillater ikke direkte søk fra appen.</strong><br>
+        Klikk «Søk på oda.com ↗» under, finn produktet, kopier URL-en og bruk «Legg inn manuelt».
+      </div>`;
+  }
+}
+
+function openPKManuell() {
+  const ingr = window._pkAktiv;
+  document.getElementById('modals').innerHTML = `
+    <div class="overlay" onclick="if(event.target===this)closeModal()">
+      <div class="modal">
+        <h2>Legg inn manuelt</h2>
+        <div class="modal-sub">Ingrediens: <strong>${ingr}</strong></div>
+        <div class="form-group">
+          <label class="form-label">Oda-produktnavn (slik det heter på oda.com)</label>
+          <input class="form-input" id="pk-m-name" placeholder="f.eks. Nortura Kyllingfilet 600g">
+        </div>
+        <div class="form-group">
+          <label class="form-label">URL eller produkt-ID (valgfritt)</label>
+          <input class="form-input" id="pk-m-url" placeholder="https://oda.com/no/products/12345/">
+        </div>
+        <div class="modal-actions">
+          <button class="btn btn-ghost" onclick="openPKModal('${esc(ingr)}')">← Tilbake</button>
+          <button class="btn btn-terra" onclick="lagrePKManuell('${esc(ingr)}')">Lagre kobling</button>
+        </div>
+      </div>
+    </div>`;
+  setTimeout(()=>document.getElementById('pk-m-name')?.focus(), 80);
+}
+
+async function lagrePKManuell(ingr) {
+  const navn = document.getElementById('pk-m-name')?.value?.trim();
+  const urlVal = document.getElementById('pk-m-url')?.value?.trim();
+  if(!navn){ toast('Skriv inn produktnavn'); return; }
+  const idMatch = urlVal?.match(/\/products\/(\d+)/);
+  const odaId = idMatch ? parseInt(idMatch[1]) : null;
+  await window._fb.savePKobling(ingr, { odaNavn: navn, odaId, img:'', price:'', odaUrl: urlVal||'' });
+  closeModal(); renderListe(); toast(`✓ Koblet "${ingr}" → "${navn}"`);
+}
+
+async function velgPK(odaId, odaNavn, img, price, odaUrl) {
+  const ingr = window._pkAktiv;
+  await window._fb.savePKobling(ingr, { odaId, odaNavn, img, price, odaUrl });
+  closeModal(); renderListe(); toast(`✓ Koblet til "${odaNavn}"`);
+}
+
+async function fjernPK(ingr) {
+  await window._fb.deletePKobling(ingr);
+  closeModal(); renderListe(); toast('Kobling fjernet');
 }
 
 function toggleChk(prefix,key){
